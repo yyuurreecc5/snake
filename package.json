@@ -1,0 +1,22 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "description": "Game snake.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "webpack --display-error-details"
+  },
+  "repository": {
+    "type": "git",
+    "url": "snake"
+  },
+  "keywords": [
+    "snake"
+  ],
+  "author": "Yura Kiselew",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
+}
