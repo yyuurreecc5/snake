@@ -15,7 +15,7 @@ class Game {
         this.screen = new Screen();
         this.field = new Field(20, 20);
         this.snake = new Snake();
-        this.foodCreator = new FoodCreator(this.field);
+        this.foodCreator = new FoodCreator(this.field, this.snake);
         this.food = this.foodCreator.create();
     }
 
@@ -38,7 +38,7 @@ class Game {
         } else {
             this.snake.move();
         }
-        if( !this.field.isInBoundary(this.snake.body[0]) ) {
+        if( !this.field.isInBoundary(this.snake.getHead()) ) {
             return;
         }
         this.screen.draw();

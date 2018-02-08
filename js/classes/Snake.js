@@ -61,6 +61,9 @@ var Snake = /** @class */ (function () {
             }
         });
     };
+    Snake.prototype.getHead = function () {
+        return this.body[0] || null;
+    };
     Snake.prototype.move = function () {
         this.position.move(this.direction.value);
         for (var i = this.body.length - 1; i > 0; i--) {
@@ -85,6 +88,14 @@ var Snake = /** @class */ (function () {
             }
         }
         return false;
+    };
+    Snake.prototype.isOverlap = function (point) {
+        return this.body.some(function (bodyPoint) {
+            if (bodyPoint.isOverlap(point)) {
+                return true;
+            }
+            return false;
+        });
     };
     Snake.prototype.draw = function (ctx) {
         var _this = this;

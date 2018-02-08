@@ -68,6 +68,10 @@ class Snake implements Drawable {
         })
     }
 
+    getHead() {
+        return this.body[0] || null;
+    }
+
     move() {
         this.position.move(this.direction.value);
         for(let i = this.body.length - 1; i > 0; i--) {
@@ -94,6 +98,15 @@ class Snake implements Drawable {
             }
         }
         return false;
+    }
+
+    isOverlap(point: Point) {
+        return this.body.some((bodyPoint) => {
+            if(bodyPoint.isOverlap(point)) {
+                return true;
+            }
+            return false;
+        })
     }
 
     draw(ctx) {

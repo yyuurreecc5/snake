@@ -15,7 +15,7 @@ var Game = /** @class */ (function () {
         this.screen = new Screen_1.default();
         this.field = new Field_1.default(20, 20);
         this.snake = new Snake_1.default();
-        this.foodCreator = new FoodCreator_1.default(this.field);
+        this.foodCreator = new FoodCreator_1.default(this.field, this.snake);
         this.food = this.foodCreator.create();
     }
     Game.prototype.init = function () {
@@ -36,7 +36,7 @@ var Game = /** @class */ (function () {
         else {
             this.snake.move();
         }
-        if (!this.field.isInBoundary(this.snake.body[0])) {
+        if (!this.field.isInBoundary(this.snake.getHead())) {
             return;
         }
         this.screen.draw();

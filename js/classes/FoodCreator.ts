@@ -1,23 +1,38 @@
 import Food from "./Food";
 import Field from "./Field";
+import Snake from "./Snake";
+import mathHelper from "../helpers/math-helper";
 
 class FoodCreator {
-    private maxWidth;
-    private maxHeight;
+    private maxWidth: number;
+    private maxHeight: number;
+    private snake: Snake;
 
-    constructor(field: Field) {
+
+    constructor(field: Field, snake: Snake) {
         this.maxWidth = field.width;
         this.maxHeight = field.height;
-        console.log('field size');
-        console.log(this.maxWidth);
-    }
-
-    private rand(min: number, max: number) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        this.snake = snake;
     }
 
     public create() {
-        return new Food(this.rand(0, this.maxWidth - 1), this.rand(0, this.maxHeight - 1));
+        let newFood = null;
+        while(!newFood) {
+            newFood = this.tryCreate();
+        }
+        return newFood;
+    }
+
+    private tryCreate() {
+        let newFood = new Food(
+            mathHelper.getRandomInt(0, this.maxWidth - 1),
+            mathHelper.getRandomInt(0, this.maxHeight - 1)
+        );
+
+        if(this.snake.isOverlap(newFood)) {
+            return null;
+        }
+        return newFood;
     }
 }
 
