@@ -36,6 +36,42 @@ var Point = /** @class */ (function () {
         }
         return false;
     };
+    Point.prototype.isRightOf = function (point) {
+        if (this.x > point.x) {
+            return true;
+        }
+        return false;
+    };
+    Point.prototype.isSameHorizontal = function (point) {
+        if (this.x === point.x) {
+            return true;
+        }
+        return false;
+    };
+    Point.prototype.isSameVertical = function (point) {
+        if (this.y === point.y) {
+            return true;
+        }
+        return false;
+    };
+    Point.prototype.isLeftOf = function (point) {
+        if (this.x < point.x) {
+            return true;
+        }
+        return false;
+    };
+    Point.prototype.isUnder = function (point) {
+        if (this.y > point.y) {
+            return true;
+        }
+        return false;
+    };
+    Point.prototype.isAbove = function (point) {
+        if (this.y < point.y) {
+            return true;
+        }
+        return false;
+    };
     Point.prototype.draw = function (ctx, type) {
         if (type === void 0) { type = 'fill'; }
         if (type == 'fill') {

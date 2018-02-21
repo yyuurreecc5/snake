@@ -1,7 +1,7 @@
 import eDirection from "../enums/eDirection";
 
 class Direction {
-    private value;
+    public value;
 
     constructor(value: eDirection) {
         this.value = value;

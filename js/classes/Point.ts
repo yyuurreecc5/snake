@@ -43,6 +43,48 @@ class Point implements Drawable {
         return false;
     }
 
+    isRightOf(point: Point) {
+        if(this.x > point.x) {
+            return true;
+        }
+        return false;
+    }
+
+    isSameHorizontal(point: Point) {
+        if(this.x === point.x) {
+            return true;
+        }
+        return false;
+    }
+
+    isSameVertical(point: Point) {
+        if(this.y === point.y) {
+            return true;
+        }
+        return false;
+    }
+
+    isLeftOf(point: Point) {
+        if(this.x < point.x) {
+            return true;
+        }
+        return false;
+    }
+
+    isUnder(point: Point) {
+        if(this.y > point.y) {
+            return true;
+        }
+        return false;
+    }
+
+    isAbove(point: Point) {
+        if(this.y < point.y) {
+            return true;
+        }
+        return false;
+    }
+
     draw(ctx, type = 'fill') {
         if(type == 'fill') {
             ctx.fillRect(this.x * Point.SIZE, this.y * Point.SIZE, Point.SIZE, Point.SIZE);

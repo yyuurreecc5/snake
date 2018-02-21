@@ -1,23 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Point_1 = require("./Point");
-var eDirection_1 = require("../enums/eDirection");
-var eColor_1 = require("../enums/eColor");
-var Direction_1 = require("./Direction");
+var eDirection_1 = require("../../enums/eDirection");
+var Point_1 = require("../Point");
 var Snake = /** @class */ (function () {
-    function Snake(size, direction, position) {
-        if (size === void 0) { size = 5; }
-        if (direction === void 0) { direction = new Direction_1.default(eDirection_1.default.DOWN); }
-        if (position === void 0) { position = new Point_1.default(5, 5); }
+    function Snake(params) {
         this.body = [];
-        this.BODY_COLOR = eColor_1.default.BLUE;
-        this.HEAD_COLOR = eColor_1.default.RED;
-        this.direction = direction;
-        this.position = position;
-        this.init(size);
+        this.position = null;
+        this.controller = null;
+        this.direction = null;
+        this.direction = params.direction;
+        this.position = params.position;
+        this.HEAD_COLOR = params.headColor ? params.headColor : null;
+        this.BODY_COLOR = params.bodyColor ? params.bodyColor : null;
+        this.init(params.size);
     }
     Snake.prototype.init = function (size) {
-        var _this = this;
         switch (this.direction.value) {
             case eDirection_1.default.LEFT:
                 for (var i = 0; i < size; i++) {
@@ -43,23 +40,24 @@ var Snake = /** @class */ (function () {
                 console.error('Ошибка инициализации змейки');
                 break;
         }
-        window.addEventListener('keydown', function (event) {
-            event.preventDefault();
-            switch (event.key) {
-                case 'ArrowUp':
-                    _this.direction.setValue(eDirection_1.default.UP);
-                    break;
-                case 'ArrowDown':
-                    _this.direction.setValue(eDirection_1.default.DOWN);
-                    break;
-                case 'ArrowLeft':
-                    _this.direction.setValue(eDirection_1.default.LEFT);
-                    break;
-                case 'ArrowRight':
-                    _this.direction.setValue(eDirection_1.default.RIGHT);
-                    break;
-            }
-        });
+    };
+    Snake.prototype.handleEvent = function (event) {
+        switch (event) {
+            case eDirection_1.default.UP:
+                this.direction.value = eDirection_1.default.UP;
+                break;
+            case eDirection_1.default.DOWN:
+                this.direction.value = eDirection_1.default.DOWN;
+                break;
+            case eDirection_1.default.LEFT:
+                this.direction.value = eDirection_1.default.LEFT;
+                break;
+            case eDirection_1.default.RIGHT:
+                this.direction.value = eDirection_1.default.RIGHT;
+                break;
+            default:
+                console.warn('Не обработанное событие в классе Snake');
+        }
     };
     Snake.prototype.getHead = function () {
         return this.body[0] || null;
@@ -71,8 +69,11 @@ var Snake = /** @class */ (function () {
         }
         this.body[0].move(this.direction.value);
     };
+    Snake.prototype.getDirection = function () {
+        return this.direction.value;
+    };
     Snake.prototype.eat = function (food) {
-        if (this.body[0].isOverlap(food)) {
+        if (this.getHead().isOverlap(food)) {
             var oldPosition = this.body[this.body.length - 1];
             this.move();
             this.body.push(new Point_1.default(oldPosition.x, oldPosition.y));

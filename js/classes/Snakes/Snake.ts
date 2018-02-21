@@ -1,46 +1,48 @@
-import Point from "./Point";
-import eDirection from "../enums/eDirection";
-import eColor from "../enums/eColor";
-import Direction from "./Direction";
-import Drawable from "../interfaces/iDrawable";
-import Food from "./Food";
+import iDrawable from "../../interfaces/iDrawable";
+import iObserver from "../../interfaces/iObserver";
+import eDirection from "../../enums/eDirection";
+import Point from "../Point";
+import Controller from "../Controllers/Controller";
+import Direction from "../Direction";
+import Food from "../Food";
+import eColor from "../../enums/eColor";
 
-class Snake implements Drawable {
-    private position;
-    private direction;
-    private body = [];
-    private BODY_COLOR = eColor.BLUE;
-    private HEAD_COLOR = eColor.RED;
+class Snake implements iDrawable, iObserver {
+    protected body : Point[] = [];
+    protected position : Point = null;
+    protected HEAD_COLOR: eColor;
+    protected BODY_COLOR: eColor;
 
-    constructor(
-        size: number = 5,
-        direction: Direction = new Direction(eDirection.DOWN),
-        position: Point = new Point(5, 5)
-    ) {
-        this.direction = direction;
-        this.position = position;
-        this.init(size);
+    protected controller : Controller = null;
+    protected direction : Direction = null;
+
+    constructor(params) {
+        this.direction = params.direction;
+        this.position = params.position;
+        this.HEAD_COLOR = params.headColor ? params.headColor : null;
+        this.BODY_COLOR = params.bodyColor ? params.bodyColor : null;
+        this.init(params.size);
     }
 
     init(size) {
-        switch(this.direction.value) {
+        switch (this.direction.value) {
             case eDirection.LEFT:
-                for(let i = 0; i < size; i++) {
+                for (let i = 0; i < size; i++) {
                     this.body.push(new Point(this.position.x + i, this.position.y));
                 }
                 break;
             case eDirection.RIGHT:
-                for(let i = 0; i < size; i++) {
+                for (let i = 0; i < size; i++) {
                     this.body.push(new Point(this.position.x - i, this.position.y));
                 }
                 break;
             case eDirection.UP:
-                for(let i = 0; i < size; i++) {
+                for (let i = 0; i < size; i++) {
                     this.body.push(new Point(this.position.x, this.position.y + i));
                 }
                 break;
             case eDirection.DOWN:
-                for(let i = 0; i < size; i++) {
+                for (let i = 0; i < size; i++) {
                     this.body.push(new Point(this.position.x, this.position.y - i));
                 }
                 break;
@@ -48,24 +50,25 @@ class Snake implements Drawable {
                 console.error('Ошибка инициализации змейки');
                 break;
         }
+    }
 
-        window.addEventListener('keydown', (event) => {
-            event.preventDefault();
-            switch(event.key) {
-                case 'ArrowUp':
-                    this.direction.setValue(eDirection.UP);
-                    break;
-                case 'ArrowDown':
-                    this.direction.setValue(eDirection.DOWN);
-                    break;
-                case 'ArrowLeft':
-                    this.direction.setValue(eDirection.LEFT);
-                    break;
-                case 'ArrowRight':
-                    this.direction.setValue(eDirection.RIGHT);
-                    break;
-            }
-        })
+    handleEvent(event: eDirection) {
+        switch(event) {
+            case eDirection.UP:
+                this.direction.value = eDirection.UP;
+                break;
+            case eDirection.DOWN:
+                this.direction.value = eDirection.DOWN;
+                break;
+            case eDirection.LEFT:
+                this.direction.value = eDirection.LEFT;
+                break;
+            case eDirection.RIGHT:
+                this.direction.value = eDirection.RIGHT;
+                break;
+            default:
+                console.warn('Не обработанное событие в классе Snake');
+        }
     }
 
     getHead() {
@@ -80,8 +83,12 @@ class Snake implements Drawable {
         this.body[0].move(this.direction.value);
     }
 
+    getDirection() {
+        return this.direction.value;
+    }
+
     eat(food: Food) {
-        if(this.body[0].isOverlap(food)) {
+        if(this.getHead().isOverlap(food)) {
             let oldPosition = this.body[this.body.length - 1];
             this.move();
             this.body.push(new Point(oldPosition.x, oldPosition.y));
@@ -89,6 +96,7 @@ class Snake implements Drawable {
         }
         return false;
     }
+
 
     isEatSelf() {
         let head = this.body[0];
@@ -99,6 +107,8 @@ class Snake implements Drawable {
         }
         return false;
     }
+
+
 
     isOverlap(point: Point) {
         return this.body.some((bodyPoint) => {
