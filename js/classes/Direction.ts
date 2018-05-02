@@ -1,4 +1,5 @@
 import eDirection from "../enums/eDirection";
+import MathHelper from "../helpers/math-helper";
 
 class Direction {
     public value;
@@ -7,7 +8,19 @@ class Direction {
         this.value = value;
     }
 
-    private isOpposite(direction: eDirection) {
+    public static getRandom() {
+        return MathHelper.getRandomInt(0, 4);
+    }
+
+    public static getDirections() {
+        let directions = [];
+        for(let i = 0; i !== eDirection.LAST; i++) {
+            directions.push(i);
+        }
+        return directions;
+    }
+
+    public isOpposite(direction: eDirection) {
         if(Math.abs(this.value - direction ) == 2) {
             return true;
         }

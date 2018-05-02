@@ -5,7 +5,7 @@ class Point implements Drawable {
     public x = 0;
     public y = 0;
 
-    public static SIZE = 20; // Размер в пикселях минимальной точки в игре
+    public static SIZE = 15; // Размер в пикселях минимальной точки в игре
 
     constructor(x: number, y: number) {
         this.x = x;
@@ -43,13 +43,6 @@ class Point implements Drawable {
         return false;
     }
 
-    isRightOf(point: Point) {
-        if(this.x > point.x) {
-            return true;
-        }
-        return false;
-    }
-
     isSameHorizontal(point: Point) {
         if(this.x === point.x) {
             return true;
@@ -59,6 +52,13 @@ class Point implements Drawable {
 
     isSameVertical(point: Point) {
         if(this.y === point.y) {
+            return true;
+        }
+        return false;
+    }
+
+    isRightOf(point: Point) {
+        if(this.x > point.x) {
             return true;
         }
         return false;

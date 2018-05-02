@@ -1,8 +1,9 @@
 import Point from './Point';
 import eColor from "../enums/eColor";
-import Drawable from "../interfaces/iDrawable";
+import iDrawable from "../interfaces/iDrawable";
+import iUpdatable from "../interfaces/iUpdatable";
 
-class Field implements Drawable {
+class Field implements iDrawable, iUpdatable {
 
     public width = 0;
     public height = 0;
@@ -41,6 +42,10 @@ class Field implements Drawable {
                 field.draw(ctx);
             })
         })
+    }
+
+    update() {
+
     }
 }
 

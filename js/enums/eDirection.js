@@ -6,5 +6,6 @@ var eDirection;
     eDirection[eDirection["UP"] = 1] = "UP";
     eDirection[eDirection["RIGHT"] = 2] = "RIGHT";
     eDirection[eDirection["DOWN"] = 3] = "DOWN";
+    eDirection[eDirection["LAST"] = 4] = "LAST";
 })(eDirection || (eDirection = {}));
 exports.default = eDirection;

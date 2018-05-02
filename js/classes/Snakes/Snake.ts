@@ -4,10 +4,12 @@ import eDirection from "../../enums/eDirection";
 import Point from "../Point";
 import Controller from "../Controllers/Controller";
 import Direction from "../Direction";
-import Food from "../Food";
 import eColor from "../../enums/eColor";
+import iUpdatable from "../../interfaces/iUpdatable";
+import eObjectFlags from "../../enums/eObjectFlags";
+import Field from "../Field";
 
-class Snake implements iDrawable, iObserver {
+class Snake implements iDrawable, iObserver, iUpdatable {
     protected body : Point[] = [];
     protected position : Point = null;
     protected HEAD_COLOR: eColor;
@@ -15,12 +17,19 @@ class Snake implements iDrawable, iObserver {
 
     protected controller : Controller = null;
     protected direction : Direction = null;
+    public flags: eObjectFlags[];
+    public field: Field;
 
+    private isGrowing = false;
+    private lastEvent = null;
+    private prevStep = null;
     constructor(params) {
+        this.flags = [eObjectFlags.SOLID];
         this.direction = params.direction;
         this.position = params.position;
         this.HEAD_COLOR = params.headColor ? params.headColor : null;
         this.BODY_COLOR = params.bodyColor ? params.bodyColor : null;
+        this.field = params.field;
         this.init(params.size);
     }
 
@@ -53,7 +62,16 @@ class Snake implements iDrawable, iObserver {
     }
 
     handleEvent(event: eDirection) {
-        switch(event) {
+        this.lastEvent = event;
+    }
+
+    changeDirection(newDirection: eDirection) {
+
+        if(this.direction.isOpposite(newDirection)) {
+            return;
+        }
+        
+        switch(newDirection) {
             case eDirection.UP:
                 this.direction.value = eDirection.UP;
                 break;
@@ -67,7 +85,7 @@ class Snake implements iDrawable, iObserver {
                 this.direction.value = eDirection.RIGHT;
                 break;
             default:
-                console.warn('Не обработанное событие в классе Snake');
+                //console.warn('Не обработанное событие в классе Snake');
         }
     }
 
@@ -75,28 +93,54 @@ class Snake implements iDrawable, iObserver {
         return this.body[0] || null;
     }
 
+    getCoordinates() {
+        return this.body;
+    }
+
+    grow() {
+        this.isGrowing = true;
+    }
+
+    savePrevStep() {
+        this.prevStep = {
+            position: new Point(this.position.x, this.position.y),
+            body: []
+        }
+        for(let i = 0; i < this.body.length; i++) {
+            this.prevStep.body.push(new Point(this.body[i].x, this.body[i].y));
+        }
+    }
+
     move() {
+        this.savePrevStep();
         this.position.move(this.direction.value);
         for(let i = this.body.length - 1; i > 0; i--) {
             this.body[i].setNewPosition(this.body[i - 1]);
         }
-        this.body[0].move(this.direction.value);
+        this.getHead().move(this.direction.value);
+    }
+
+    revertMove() {
+        this.position = new Point(this.prevStep.position.x, this.prevStep.position.y);
+        this.body = [];
+        for(let i = 0; i < this.prevStep.body.length; i++) {
+            this.body.push(new Point(this.prevStep.body[i].x, this.prevStep.body[i].y));
+        }
+    }
+
+    update() {
+        this.changeDirection(this.lastEvent);
+        if(this.isGrowing) {
+            let lastElement = Object.assign({}, this.body[this.body.length - 1]);
+            this.body.push(new Point(lastElement.x, lastElement.y));
+            this.isGrowing = false;
+        }
+        this.move();
     }
 
     getDirection() {
         return this.direction.value;
     }
-
-    eat(food: Food) {
-        if(this.getHead().isOverlap(food)) {
-            let oldPosition = this.body[this.body.length - 1];
-            this.move();
-            this.body.push(new Point(oldPosition.x, oldPosition.y));
-            return true;
-        }
-        return false;
-    }
-
 
     isEatSelf() {
         let head = this.body[0];
@@ -107,8 +151,6 @@ class Snake implements iDrawable, iObserver {
         }
         return false;
     }
-
-
 
     isOverlap(point: Point) {
         return this.body.some((bodyPoint) => {

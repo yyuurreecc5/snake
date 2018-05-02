@@ -1,84 +1,35 @@
-import Screen from './Screen';
-import Field from './Field';
-import FoodCreator from "./FoodCreator";
-import eDirection from "../enums/eDirection";
-import Direction from "./Direction";
-import Point from "./Point";
-import SnakesCollisionDetector from "./CollisionDetectors/SnakesCollisionDetector";
-import PlayerSnake from "./Snakes/PlayerSnake";
-import EnemySnake from "./Snakes/EnemySnake";
+import Scene from "./Scene";
+import eGameState from "../enums/eGameState";
 
 class Game {
-    private screen = null;
-    private field = null;
-    private playerSnake = null;
-    private enemySnake = null;
-    private speed = 100;
-    private food = null;
-    private foodCreator = null;
-    private snakesCollisionDetector = null;
-
+    private gameSpeed: Number;
+    private scene : Scene;
+    private timer;
+    public state: eGameState;
     constructor() {
-        this.screen = new Screen();
-        this.field = new Field(30, 30);
-        let playerSnakeParams = {
-            direction: null,
-            position: null,
-            size: null
-        };
-        playerSnakeParams.direction = new Direction(eDirection.RIGHT);
-        playerSnakeParams.position = new Point(5, 5);
-        playerSnakeParams.size = 5;
-        this.playerSnake = new PlayerSnake(playerSnakeParams);
-
-        this.foodCreator = new FoodCreator(this.field, this.playerSnake);
-        this.food = this.foodCreator.create();
-
-        let enemySnakeParams = {
-          direction: null,
-          position: null,
-          size: null
-        };
-
-        enemySnakeParams.direction = new Direction(eDirection.LEFT);
-        enemySnakeParams.position = new Point(10, 10);
-        enemySnakeParams.size = 5;
-        this.enemySnake = new EnemySnake(enemySnakeParams, this.food);
-
-
-        this.snakesCollisionDetector = new SnakesCollisionDetector(this.playerSnake, [this.enemySnake]);
+        this.gameSpeed = 100;
+        this.scene = new Scene(this);
+        this.timer = 0;
     }
 
     init() {
-        this.screen.addObject(this.field);
-        this.screen.addObject(this.playerSnake);
-        this.screen.addObject(this.enemySnake);
-        this.screen.addObject(this.food);
+        this.scene.update();
+        this.state = eGameState.PAUSE;
+        document.addEventListener('keydown', (e) => {
+            if(this.state === eGameState.PAUSE) {
+                this.run();
+            }
+        })
     }
 
-    start() {
-        setInterval(this.mainLoop.bind(this), this.speed);
+    run() {
+        this.state = eGameState.PLAY;
+        this.timer = setInterval(this.scene.update.bind(this.scene), this.gameSpeed);
     }
 
-    mainLoop() {
-        if( this.playerSnake.isEatSelf() ) {
-            return;
-        }
-
-        if(this.snakesCollisionDetector.check()) {
-            return;
-        }
-
-        if( this.playerSnake.eat(this.food) || this.enemySnake.eat(this.food)) {
-            this.food.setNewPosition(this.foodCreator.create());
-        } else {
-            this.playerSnake.move();
-            this.enemySnake.move();
-        }
-        if( !this.field.isInBoundary(this.playerSnake.getHead()) ) {
-            return;
-        }
-        this.screen.draw();
+    gameOver() {
+        clearInterval(this.timer);
+        this.state = eGameState.GAME_OVER;
     }
 }
 

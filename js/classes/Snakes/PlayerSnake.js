@@ -17,8 +17,8 @@ var PlayerSnake = /** @class */ (function (_super) {
     __extends(PlayerSnake, _super);
     function PlayerSnake(params) {
         var _this = _super.call(this, params) || this;
-        _this.DEFAULT_BODY_COLOR = eColor_1.default.BLUE;
         _this.DEFAULT_HEAD_COLOR = eColor_1.default.RED;
+        _this.DEFAULT_BODY_COLOR = eColor_1.default.BLUE;
         _this.HEAD_COLOR = _this.HEAD_COLOR || _this.DEFAULT_HEAD_COLOR;
         _this.BODY_COLOR = _this.BODY_COLOR || _this.DEFAULT_BODY_COLOR;
         _this.controller = new KeyboardController_1.default();

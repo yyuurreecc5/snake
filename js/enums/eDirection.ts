@@ -2,7 +2,8 @@ enum eDirection {
     LEFT,
     UP,
     RIGHT,
-    DOWN
+    DOWN,
+    LAST
 }
 
 export default eDirection;

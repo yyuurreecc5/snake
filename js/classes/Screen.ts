@@ -1,21 +1,17 @@
-import Drawable from "../interfaces/iDrawable";
+import iDrawable from "../interfaces/iDrawable";
 
-class Screen {
+class Screen implements iDrawable{
 
     private canvas = null;
     private ctx = null;
     private toDrawObjects = [];
 
-    constructor() {
+    constructor(objects) {
         this.canvas = document.getElementById('canvas');
         this.canvas.width = 1000;
         this.canvas.height = 1000;
         this.ctx = this.canvas.getContext('2d');
-    }
-
-    addObject(drawable: Drawable) {
-        this.toDrawObjects.push(drawable);
-        console.log(this.toDrawObjects);
+        this.toDrawObjects = objects;
     }
 
     draw() {

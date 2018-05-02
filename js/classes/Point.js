@@ -36,12 +36,6 @@ var Point = /** @class */ (function () {
         }
         return false;
     };
-    Point.prototype.isRightOf = function (point) {
-        if (this.x > point.x) {
-            return true;
-        }
-        return false;
-    };
     Point.prototype.isSameHorizontal = function (point) {
         if (this.x === point.x) {
             return true;
@@ -50,6 +44,12 @@ var Point = /** @class */ (function () {
     };
     Point.prototype.isSameVertical = function (point) {
         if (this.y === point.y) {
+            return true;
+        }
+        return false;
+    };
+    Point.prototype.isRightOf = function (point) {
+        if (this.x > point.x) {
             return true;
         }
         return false;
@@ -81,7 +81,7 @@ var Point = /** @class */ (function () {
             ctx.strokeRect(this.x * Point.SIZE, this.y * Point.SIZE, Point.SIZE, Point.SIZE);
         }
     };
-    Point.SIZE = 20; // Размер в пикселях минимальной точки в игре
+    Point.SIZE = 15; // Размер в пикселях минимальной точки в игре
     return Point;
 }());
 exports.default = Point;

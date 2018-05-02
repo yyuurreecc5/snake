@@ -12,14 +12,24 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Point_1 = require("./Point");
 var eColor_1 = require("../enums/eColor");
+var eObjectFlags_1 = require("../enums/eObjectFlags");
 var Food = /** @class */ (function (_super) {
     __extends(Food, _super);
-    function Food(x, y) {
-        return _super.call(this, x, y) || this;
+    function Food(x, y, field) {
+        var _this = _super.call(this, x, y) || this;
+        _this.field = field;
+        _this.flags = [eObjectFlags_1.default.PICKUP];
+        return _this;
     }
     Food.prototype.draw = function (ctx) {
         ctx.fillStyle = eColor_1.default.YELLOW;
         _super.prototype.draw.call(this, ctx);
+    };
+    Food.prototype.getCoordinates = function () {
+        return [this];
+    };
+    Food.prototype.update = function () {
+        //console.log("food update");
     };
     return Food;
 }(Point_1.default));

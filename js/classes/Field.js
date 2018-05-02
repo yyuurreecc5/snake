@@ -35,6 +35,8 @@ var Field = /** @class */ (function () {
             });
         });
     };
+    Field.prototype.update = function () {
+    };
     return Field;
 }());
 exports.default = Field;
