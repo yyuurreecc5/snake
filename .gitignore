@@ -59,6 +59,6 @@ typings/
 
 #custom
 .idea/
-*.js
+js/*.js
 !bundle.js
 
