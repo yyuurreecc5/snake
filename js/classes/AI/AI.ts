@@ -116,7 +116,7 @@ class AI {
         snake.move();
 
         let canMove = true;
-        let collisions = [];
+        let collisions;
         if(snake.isEatSelf()) {
             canMove = false;
         } else if(this.phisyc.checkBoundaryOverflow()) {

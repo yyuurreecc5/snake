@@ -1,25 +1,28 @@
 const path = require('path');
 
 module.exports = {
+    mode: 'development',
     watch: true,
-    entry: './js/index.js',
+    entry: './js/index.ts',
+    devtool: 'inline-source-map',
+    devServer: {
+        contentBase: path.join(__dirname, './'),
+        compress: true,
+        port: 9000,
+        inline: true,
+        hot: true
+    },
     output: {
       filename: 'bundle.js',
-      path: path.resolve('output')
+      path: path.resolve(__dirname, 'output')
     },
-    devtool: 'inline-source-map',
     module: {
-        loaders: [
-            {
-                test: /\.css$/,
-                loader: "style-loader!css-loader"
-            },
-            { 
-                test: /\.svg$/, 
-                loader: 'file-loader' 
-            }
-        ],
         rules: [
+            {
+              test: /\.tsx?$/,
+              use: 'ts-loader',
+              exclude: /node_modules/
+            },
             {
                 test: /\.(eot|ttf|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
                 use: {
@@ -37,7 +40,8 @@ module.exports = {
                         outputPath: './files/'
                     }
                 }
-            },{
+            },
+            {
                 test: /\.css$/,
                 use: [{
                     loader: "style-loader" // creates style nodes from JS strings
@@ -46,5 +50,8 @@ module.exports = {
                 }]
             }
         ]
+    },
+    resolve: {
+        extensions: [ '.tsx', '.ts', '.js' ]
     }
 }
