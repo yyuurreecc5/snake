@@ -2,7 +2,7 @@ import Scene from "./Scene";
 import eGameState from "../enums/eGameState";
 
 class Game {
-    private gameSpeed: Number;
+    private gameSpeed: number;
     private scene : Scene;
     private timer;
     public state: eGameState;
