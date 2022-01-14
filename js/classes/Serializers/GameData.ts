@@ -16,17 +16,7 @@ let gameData = {
             },
             "type": "enemy"
           },
-          {
-            "size": 5,
-            "bodyColor": "red",
-            "headColor": "white",
-            "direction": "down",
-            "position": {
-              "x": 29,
-              "y": 25
-            },
-            "type": "enemy"
-          },
+          
           {
             "size": 5,
             "bodyColor": "blue",
