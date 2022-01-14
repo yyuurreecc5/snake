@@ -1,2 +1,2 @@
 # snake
-Just for fun
+Demo: https://snake-rosy.vercel.app/dist/index.html
